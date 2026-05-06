@@ -70,13 +70,13 @@ public class SoapboxController : MonoBehaviour
 
     private void UpdateWheels()
     {
-        UpdateWheels(_frontLeftCollider, _frontLeftWheel);
-        UpdateWheels(_frontRightCollider, _frontRightWheel);
-        UpdateWheels(_rearLeftCollider, _rearLeftWheel);
-        UpdateWheels(_rearRightCollider, _rearRightWheel);
+        UpdateWheel(_frontLeftCollider, _frontLeftWheel);
+        UpdateWheel(_frontRightCollider, _frontRightWheel);
+        UpdateWheel(_rearLeftCollider, _rearLeftWheel);
+        UpdateWheel(_rearRightCollider, _rearRightWheel);
     }
 
-    private void UpdateWheels(WheelCollider collider, Transform wheel)
+    private void UpdateWheel(WheelCollider collider, Transform wheel)
     {
         collider.GetWorldPose(out var pos, out var rot);
         wheel.rotation = rot;
