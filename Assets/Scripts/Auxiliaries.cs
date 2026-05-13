@@ -19,7 +19,7 @@ public class Auxiliaries : MonoBehaviour, IPowerConsumer
         return MAX_POWER;
     }
 
-    public void ReceivePower(float power)
+    public void ReceivePower(float grantedPower)
     {
         //Debug.Log("Auxiliaries running...");
     }

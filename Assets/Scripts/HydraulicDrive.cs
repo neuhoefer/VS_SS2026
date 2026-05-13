@@ -26,7 +26,6 @@ public class HydraulicDrive : MonoBehaviour, IPowerConsumer
 
     private Engine _engine;
     private float _wheelRadius = 0.0f;
-    private float _grantedPower = 0.0f;
 
     public Engine.Consumer ConsumerType => Engine.Consumer.Drive;
 
@@ -43,6 +42,7 @@ public class HydraulicDrive : MonoBehaviour, IPowerConsumer
     private void Update()
     {
         GetInput();
+        UpdateWheels();
     }
 
     private void GetInput()
@@ -75,19 +75,18 @@ public class HydraulicDrive : MonoBehaviour, IPowerConsumer
         return input * MAX_POWER;
     }
 
-    public void ReceivePower(float power)
+    public void ReceivePower(float grantedPower)
     {
-        _grantedPower = power;
-        ApplyTorque();
+        ApplyTorque(grantedPower);
     }
 
-    private void ApplyTorque()
+    private void ApplyTorque(float grantedPower)
     {
         float currentSpeed = GetCurrentSpeedMS();
         float targetSpeed = GetTargetSpeedMS();
 
         float targetOmega = targetSpeed / _wheelRadius;
-        float torque = targetOmega != 0.0f ? (_grantedPower * 1000.0f) / (targetOmega * 4) : 0.0f;
+        float torque = targetOmega != 0.0f ? (grantedPower * 1000.0f) / (targetOmega * 4) : 0.0f;
 
         ApplyTorqueToWheelColliders(_leftWheelColliders, _leftWheelsInput, currentSpeed, targetSpeed, torque);
         ApplyTorqueToWheelColliders(_rightWheelColliders, _rightWheelsInput, currentSpeed, targetSpeed, torque);
@@ -108,5 +107,20 @@ public class HydraulicDrive : MonoBehaviour, IPowerConsumer
                 wc.brakeTorque = BRAKE_TORQUE;
             }
         }
+    }
+
+    private void UpdateWheels()
+    {
+        for (int i = 0; i < _leftWheelColliders.Length; i++)
+            UpdateWheel(_leftWheelColliders[i], _leftWheelMeshes[i]);
+        for (int i = 0; i < _rightWheelColliders.Length; i++)
+            UpdateWheel(_rightWheelColliders[i], _rightWheelMeshes[i]);
+    }
+
+    private void UpdateWheel(WheelCollider collider, Transform wheel)
+    {
+        collider.GetWorldPose(out var pos, out var rot);
+        wheel.rotation = rot;
+        wheel.position = pos;
     }
 }

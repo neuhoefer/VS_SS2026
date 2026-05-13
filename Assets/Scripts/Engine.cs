@@ -15,7 +15,7 @@ public class Engine : MonoBehaviour
     private const float RPM_IDLE_POWER = 2.5f;  // kW
     private const float RPM_MAX_POWER = 18.2f;  // kW
 
-    private const float S = (RPM_MAX_POWER - RPM_IDLE_POWER) / (RPM_MAX - RPM_IDLE);
+    private const float S = (RPM_MAX_POWER - RPM_IDLE_POWER) / (float)(RPM_MAX - RPM_IDLE);
     private const float C = RPM_MAX_POWER - S * RPM_MAX;
 
     [Space(10)]
@@ -63,5 +63,5 @@ public interface IPowerConsumer
 {
     Engine.Consumer ConsumerType { get; }
     float RequestPower();
-    void ReceivePower(float power);
+    void ReceivePower(float grantedPower);
 }
