@@ -20,6 +20,12 @@ public class Engine : MonoBehaviour
 
     [Space(10)]
     [SerializeField] private bool _powerOn = false;
+    public bool PowerOn
+    {
+        get => _powerOn;
+        set => _powerOn = value;
+    }
+
     [Range(RPM_IDLE, RPM_MAX)]
     [SerializeField] private int _rpm = RPM_IDLE;
 
@@ -29,6 +35,11 @@ public class Engine : MonoBehaviour
     {
         _consumers.Add(consumer);
         _consumers.Sort((a, b) => a.ConsumerType.CompareTo(b.ConsumerType));
+    }
+
+    public float GetNormalizedRPM()
+    {
+        return (float) (_rpm - RPM_IDLE) / (RPM_MAX - RPM_IDLE);
     }
 
     private void FixedUpdate()
